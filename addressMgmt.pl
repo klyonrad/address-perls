@@ -4,11 +4,24 @@ use feature 'say';
 use feature 'unicode_strings';
 use v5.16;
 use Data::Dump 'dump';
+use Data::Dumper;
 
+my @a = (1, [2, 3], {4 => 5});
+dump(@a);
 
 my $input = '';
 #my @inputs;
 my @entries;
+push @entries, {
+		#name => "test",
+		number => 67890,
+		email => 'test@example.com'
+	};
+my @testEntryTwoList;
+push @testEntryTwoList, ('email', 'blub@bla.de');
+push @testEntryTwoList, ("number", '98765');
+my %testEntryTwo = @testEntryTwoList;
+push @entries, {%testEntryTwo};
 
 sub newEntry {
 	my %newAttributes; #hash / map... whatever you call it
@@ -21,17 +34,23 @@ sub newEntry {
 	chomp $newLine;
 	while ($newLine ne ".") {
 		#print ($newLine ne ".");
-		my @newAttribute = split /:/, $newLine, 2;
-		$newAttributes{$newAttribute[0]} = $newAttribute[1]; #[0] is key, [1] is value
+		(my $key, my $value) = split /:/, $newLine, 2;
+		#my @newAttribute = split /:/, $newLine, 2;
+		#$newAttributes{$newAttribute[0]} = $newAttribute[1]; #[0] is key, [1] is value
+		$newAttributes{$key} = $value;
 		#dump @newAttribute;
 		push @lines, $newLine;
 
 		$newLine = <stdin>; #get new key-value
 		chomp $newLine;
 	}
-	say "writing entry finished";
+
 	dump %newAttributes;
+	push @entries, {%newAttributes};
+	say "writing entry finished";
+	
 	#dump @lines;
+	return;
 }
 
 sub addAttributes {
@@ -47,7 +66,9 @@ sub showEntry {
 }
 
 sub showAllEntries {
-
+	#print Dumper (@entries);
+	dump (@entries);
+	return;
 }
 
 sub showHelp {
@@ -74,28 +95,38 @@ sub menuPrompt {
 	my $input = <stdin>;
 	print "\n";
 	chomp $input;
-	return $input;
+	my @args = split / /, $input, 2; #split arguments into to parts
+	dump @args;
+	return @args;
 }
 
 
 
 while (1) {
-	my $input = menuPrompt();
+	my @arguments = menuPrompt();
 
 	# if ($input eq 'h') {
 	# 	showHelp();
 	# }
 
-	given ($input) { #experimental, "bug-free" since v5.16
+	given ($arguments[0]) { #experimental, "bug-free" since v5.16
 		when ("e") 	{newEntry(); }
-		when ("a") 	{say "not implemented"}
-		when ("d") 	{say "not implemented"}
+		when ("a") 	{
+			say "not implemented";
+		}
+		when ("d") 	{
+			say "not implemented";
+		}
 		when ("l nn") {say "not implemented"}
-		when ("l") 	{say "not implemented"}
+		when ("l") 	{ 
+			showAllEntries(); 
+		}
 		when ("h") 	{showHelp(); }
-		when ("s") 	{say "not implemented"}
+		when ("s") 	{
+			searchEntry($arguments[1]);
+		}
 		when ("q")	{exit}
-		default		{say "wrong char"}
+		default		{say "wrong char";}
 }
 	#chomp $input;
 	#push @inputs, $input;

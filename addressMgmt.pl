@@ -6,9 +6,6 @@ use v5.16;
 use Data::Dump 'dump';
 use Data::Dumper;
 
-my @a = (1, [2, 3], {4 => 5});
-dump(@a);
-
 my $input = '';
 #my @inputs;
 my @entries;
@@ -87,6 +84,19 @@ sub showHelp {
 }
 
 sub searchEntry {
+	my ($searchQuery) = @_;
+	my @results;
+
+	while (my ($index, $entry) = each (@entries) ) {
+		#dump $entry;
+		my %hash = %{$entry}; #dereferencing
+		if ( (index $hash{'email'}, $searchQuery) != -1) {
+			say "found one at $index";
+			dump $entries[$index];
+			push @results, $index;
+		}
+	}
+	return @results;
 
 }
 
@@ -96,7 +106,7 @@ sub menuPrompt {
 	print "\n";
 	chomp $input;
 	my @args = split / /, $input, 2; #split arguments into to parts
-	dump @args;
+	#dump @args;
 	return @args;
 }
 
@@ -123,7 +133,11 @@ while (1) {
 		}
 		when ("h") 	{showHelp(); }
 		when ("s") 	{
-			searchEntry($arguments[1]);
+			if ( (scalar @arguments) < 2) {
+				say 'search string is empty';
+			} else {
+				my @results = searchEntry($arguments[1]);
+			}
 		}
 		when ("q")	{exit}
 		default		{say "wrong char";}
@@ -131,5 +145,3 @@ while (1) {
 	#chomp $input;
 	#push @inputs, $input;
 }
-
-#dump @inputs;

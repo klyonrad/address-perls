@@ -89,8 +89,11 @@ sub showHelp {
 	return;
 }
 
+#seach for text in email field, returns results array with index for entries
+#second parameter limits the amount of results
+#if you only want one entry! has no effect with numbers other than 1
 sub searchEntry {
-	my ($searchQuery) = @_;
+	my ($searchQuery, $limit) = @_;
 	my @results;
 
 	while (my ($index, $entry) = each (@entries) ) {
@@ -100,6 +103,9 @@ sub searchEntry {
 			say "found one at $index";
 			dump $entries[$index];
 			push @results, $index;
+			if ($limit == 1) {
+				last;
+			}
 		}
 	}
 	return @results;
@@ -142,7 +148,7 @@ while (1) {
 			if ( (scalar @arguments) < 2) {
 				say 'search string is empty';
 			} else {
-				my @results = searchEntry($arguments[1]);
+				my @results = searchEntry($arguments[1], 0);
 			}
 		}
 		when ("q")	{exit}

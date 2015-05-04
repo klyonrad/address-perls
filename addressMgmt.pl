@@ -41,7 +41,7 @@ sub attributesInput {
 		chomp $newLine;
 	}
 
-	dump %newAttributes;
+	#dump %newAttributes;
 	return %newAttributes;
 }
 
@@ -57,7 +57,19 @@ sub newEntry {
 }
 
 sub addAttributes {
+	my ($searchQuery) = @_;
+	my $indexForChange = searchEntry($searchQuery, 1);
+	#todo: check for existence. if not then end function
 
+	say 'enter new attributes. Will overwrite data!';
+	my %attributes = attributesInput();
+
+	my @newAttributes = keys %attributes;
+	for my $attribute (@newAttributes) {
+		#print "The value of '$attribute' is $attributes{$attribute}\n";
+		$entries[$indexForChange]{$attribute} = $attributes{$attribute};
+	}
+	return;
 }
 
 sub deleteEntry {
@@ -134,7 +146,11 @@ while (1) {
 	given ($arguments[0]) { #experimental, "bug-free" since v5.16
 		when ("e") 	{newEntry(); }
 		when ("a") 	{
-			say "not implemented";
+			if ( (scalar @arguments) < 2) {
+				say 'search string is empty';
+			} else {
+				addAttributes($arguments[1]);
+			}
 		}
 		when ("d") 	{
 			say "not implemented";

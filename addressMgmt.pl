@@ -9,6 +9,8 @@ use Data::Dumper;
 my $input = '';
 #my @inputs;
 my @entries;
+
+#fill array with test data:
 push @entries, {
 		#name => "test",
 		number => 67890,
@@ -20,12 +22,9 @@ push @testEntryTwoList, ("number", '98765');
 my %testEntryTwo = @testEntryTwoList;
 push @entries, {%testEntryTwo};
 
-sub newEntry {
+sub attributesInput {
 	my %newAttributes; #hash / map... whatever you call it
 	my @lines;
-
-	say "enter new entry:";
-
 	my $newLine = "";
 	$newLine = <stdin>;
 	chomp $newLine;
@@ -43,7 +42,14 @@ sub newEntry {
 	}
 
 	dump %newAttributes;
-	push @entries, {%newAttributes};
+	return %newAttributes;
+}
+
+sub newEntry {
+	say "enter new entry:";
+
+	my %newEntry = attributesInput();
+	push @entries, {%newEntry};
 	say "writing entry finished";
 	
 	#dump @lines;

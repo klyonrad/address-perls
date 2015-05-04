@@ -66,7 +66,6 @@ sub addAttributes {
 
 	my @newAttributes = keys %attributes;
 	for my $attribute (@newAttributes) {
-		#print "The value of '$attribute' is $attributes{$attribute}\n";
 		$entries[$indexForChange]{$attribute} = $attributes{$attribute};
 	}
 	return;
@@ -139,10 +138,6 @@ sub menuPrompt {
 while (1) {
 	my @arguments = menuPrompt();
 
-	# if ($input eq 'h') {
-	# 	showHelp();
-	# }
-
 	given ($arguments[0]) { #experimental, "bug-free" since v5.16
 		when ("e") 	{newEntry(); }
 		when ("a") 	{
@@ -169,7 +164,5 @@ while (1) {
 		}
 		when ("q")	{exit}
 		default		{say "wrong char";}
-}
-	#chomp $input;
-	#push @inputs, $input;
+	}
 }

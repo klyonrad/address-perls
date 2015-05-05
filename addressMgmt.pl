@@ -22,6 +22,8 @@ push @testEntryTwoList, ("number", '98765');
 my %testEntryTwo = @testEntryTwoList;
 push @entries, {%testEntryTwo};
 
+#List::Utils pair/wise list ?
+
 sub attributesInput {
 	my %newAttributes; #hash / map... whatever you call it
 	my @lines;
@@ -59,7 +61,7 @@ sub newEntry {
 sub addAttributes {
 	my ($searchQuery) = @_;
 	my $indexForChange = searchEntry($searchQuery, 1);
-	#todo: check for existence. if not then end function
+	#todo: check for existence of that entry. if not then end function
 
 	say 'enter new attributes. Will overwrite data!';
 	my %attributes = attributesInput();
@@ -72,16 +74,36 @@ sub addAttributes {
 }
 
 sub deleteEntry {
+	my ($searchQuery) = @_;
+	my $index = searchEntry($searchQuery, 1);
+	#todo: check for existence of that entry. if not then end function
 
+	splice @entries, $index, 1;
+	say "entry removed";
+	return;
 }
 
 sub showEntry {
+	my ($searchQuery) = @_;
+	my $index = searchEntry($searchQuery, 1);
+	#todo: check for existence of that entry. if not then end function
+
+	say "the searched entry:";
+	dump $entries[$index];
+	print "\n";
+	#my %entry = {$entries[$index]};
+	#my @attributes = keys %entry;
+	#for my $attribute ( keys { $entries[$index] } ) {
+		#print "The value of '$attribute' is $entry{$attribute}\n";
+	#}
+	return;
+	
 
 }
 
 sub showAllEntries {
-	#print Dumper (@entries);
-	dump (@entries);
+	print Dumper (@entries);
+	#dump (@entries);
 	return;
 }
 
@@ -148,13 +170,29 @@ while (1) {
 			}
 		}
 		when ("d") 	{
-			say "not implemented";
+			if ( (scalar @arguments) < 2) {
+				say 'search string is empty';
+			} else {
+				deleteEntry($arguments[1]);
+			}
 		}
-		when ("l nn") {say "not implemented"}
+		when ("l nn") {
+			if ( (scalar @arguments) < 2) {
+				say 'search string is empty';
+			} else {
+				showEntry($arguments[1]);
+			}
+		}
 		when ("l") 	{ 
-			showAllEntries(); 
+			if ( (scalar @arguments) < 2) { #seach string is empty
+				showAllEntries(); 
+			} else {
+				showEntry($arguments[1]);
+			}			
 		}
-		when ("h") 	{showHelp(); }
+		when ("h") 	{
+			showHelp(); 
+		}
 		when ("s") 	{
 			if ( (scalar @arguments) < 2) {
 				say 'search string is empty';
@@ -165,4 +203,5 @@ while (1) {
 		when ("q")	{exit}
 		default		{say "wrong char";}
 	}
+	print "\n";
 }

@@ -89,13 +89,11 @@ sub showEntry {
 	#todo: check for existence of that entry. if not then end function
 
 	say "the searched entry:";
-	dump $entries[$index];
-	print "\n";
-	#my %entry = {$entries[$index]};
-	#my @attributes = keys %entry;
-	#for my $attribute ( keys { $entries[$index] } ) {
-		#print "The value of '$attribute' is $entry{$attribute}\n";
-	#}
+	my %entry = %{$entries[$index]}; #dereference
+	my @attributes = keys %entry;
+	for my $attribute ( keys %entry ) {
+		print "The value of '$attribute' is $entry{$attribute}\n";
+	}
 	return;
 	
 
@@ -173,6 +171,7 @@ while (1) {
 			if ( (scalar @arguments) < 2) {
 				say 'search string is empty';
 			} else {
+				#check for email address pattern
 				deleteEntry($arguments[1]);
 			}
 		}
@@ -180,6 +179,7 @@ while (1) {
 			if ( (scalar @arguments) < 2) {
 				say 'search string is empty';
 			} else {
+				# check for email address
 				showEntry($arguments[1]);
 			}
 		}

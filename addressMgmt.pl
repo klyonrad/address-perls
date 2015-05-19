@@ -6,21 +6,30 @@ use v5.16;
 use Data::Dump 'dump';
 use Data::Dumper;
 
+use Address;
+
 my $input = '';
 #my @inputs;
 my @entries;
 
 #fill array with test data:
-push @entries, {
-		#name => "test",
-		number => 67890,
-		email => 'test@example.com'
-	};
-my @testEntryTwoList;
-push @testEntryTwoList, ('email', 'blub@bla.de');
-push @testEntryTwoList, ("number", '98765');
-my %testEntryTwo = @testEntryTwoList;
-push @entries, {%testEntryTwo};
+my $testEntryOne = Address->new();
+$testEntryOne->saveAttribute('email', 'test@example.com');
+$testEntryOne->saveAttribute('number', 67890);
+push @entries, $testEntryOne;
+
+my $testEntryTwo = Address->new();
+$testEntryTwo->saveAttribute('email', 'blub@bla.de');
+$testEntryTwo->saveAttribute('number', 98765);
+push @entries, $testEntryTwo;
+
+#my $testEntryThree = Address->new(
+#	attributes => {
+#		email => 'drei@drei.de',
+#		number => 54698743	
+#	}
+#);
+#push @entries, {$testEntryThree};
 
 #List::Utils pair/wise list ?
 
@@ -95,8 +104,6 @@ sub showEntry {
 		print "The value of '$attribute' is $entry{$attribute}\n";
 	}
 	return;
-	
-
 }
 
 sub showAllEntries {
@@ -129,8 +136,8 @@ sub searchEntry {
 
 	while (my ($index, $entry) = each (@entries) ) {
 		#dump $entry;
-		my %hash = %{$entry}; #dereferencing
-		if ( (index $hash{'email'}, $searchQuery) != -1) {
+		
+		if ( (index $entry->getAttribute('email'), $searchQuery) != -1) { #search in string function
 			say "found one at $index";
 			dump $entries[$index];
 			push @results, $index;
@@ -140,7 +147,6 @@ sub searchEntry {
 		}
 	}
 	return @results;
-
 }
 
 sub menuPrompt {

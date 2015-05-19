@@ -98,17 +98,16 @@ sub showEntry {
 	#todo: check for existence of that entry. if not then end function
 
 	say "the searched entry:";
-	my %entry = %{$entries[$index]}; #dereference
-	my @attributes = keys %entry;
-	for my $attribute ( keys %entry ) {
-		print "The value of '$attribute' is $entry{$attribute}\n";
-	}
+	$entries[$index]->printAll();
 	return;
 }
 
 sub showAllEntries {
-	print Dumper (@entries);
-	#dump (@entries);
+	while (my ($index, $entry) = each (@entries) ) {
+		print "____ Entry " . $index . " ____\n";
+		$entry->printAll();
+		print "\n";
+	}
 	return;
 }
 

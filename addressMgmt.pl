@@ -64,11 +64,15 @@ sub attributesInput {
 sub newEntry {
     say "enter new entry:";
 
-    my %newEntry = attributesInput();
-    push @entries, {%newEntry};
+    my %newAttributes = attributesInput();
+	my $newEntry = Adress->new();
+	
+	for my $key (keys %newAttributes) {
+		$newEntry->saveAttribute($newAttributes{$key});
+	}
+    push @entries, $newEntry;
     say "writing entry finished";
 
-    #dump @lines;
     return;
 }
 

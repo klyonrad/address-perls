@@ -2,12 +2,18 @@ package Address;
 
 use Moose;
 
-has 'attributes' => ( 
-	is => 'rw',
-	isa => 'HashRef', 
-	default => sub { {} }
-	#If you want to use a reference of any sort as the default value, you must return it from a subroutine.
-	# https://metacpan.org/pod/Moose::Manual::Attributes#Default-and-builder-methods
+has 'attributes' => (
+    is      => 'rw',
+    isa     => 'HashRef',
+    default => sub {
+        {
+            email  => 'default@email.com',
+            number => '555-NASE'
+        };
+    }
+
+#If you want to use a reference of any sort as the default value, you must return it from a subroutine.
+# https://metacpan.org/pod/Moose::Manual::Attributes#Default-and-builder-methods
 );
 
 sub saveAttribute {

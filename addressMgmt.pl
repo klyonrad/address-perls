@@ -1,29 +1,79 @@
 use warnings;
-
+#use strict;
 #use Switch;
 use feature 'say';
 use feature 'unicode_strings';
 use v5.16;
 use Data::Dump 'dump';
 use Data::Dumper;
+use DBI;
+use MongoDB;
 
 use Address;
+
+#sub databaseHandle{
+	#my $dbfile		= "addresses.db";
+#	my $dsn			= "dbi:SQLite:dbname=$dbfile";
+#	my $user		= "";
+#	my $password	= "";
+#	my $dbh = DBI->connect($dsn, $user, $password, {
+#	   PrintError       => 0,
+#	   RaiseError       => 1,
+#	   AutoCommit       => 1,
+#	   FetchHashKeyName => 'NAME_lc',
+#	});
+#}
+
+
+#my $dbh = databaseHandle;
+
+#my $sql = <<'END_SQL';
+#CREATE TABLE addresses (
+ # id       INTEGER PRIMARY KEY,
+ # fname    VARCHAR(100),
+ # lname    VARCHAR(100),
+ # email    VARCHAR(100) UNIQUE NOT NULL,
+#  password VARCHAR(20)
+#)
+#END_SQL
+ 
+#$dbh->do($sql);
+
+
+
+my $client     = MongoDB::MongoClient->new(host => 'localhost', port => 27017);
+my $database   = $client->get_database( 'new-perlWP' );
+my $collection = $database->get_collection( 'addresses' );
+my $mongodbcursor       = $collection->find();
+my @dbElementsArray = $mongodbcursor->all;
+#dump @arr;
+#print $arr[0]->{'name'}."\n"
+#dump $data; 
 
 my $input = '';
 
 #my @inputs;
 my @entries;
 
-#fill array with test data:
-my $testEntryOne = Address->new();
-$testEntryOne->saveAttribute( 'email',  'test@example.com' );
-$testEntryOne->saveAttribute( 'number', 67890 );
-push @entries, $testEntryOne;
+foreach (@dbElementsArray) { #copy collection elements in-memory
+	my $newEntry = Address->new();
+	my %hashDeRef = %{$_};
+	for my $property (keys %hashDeRef) {
+		$newEntry->saveAttribute($property, $hashDeRef{$property} );
+	}
+	push @entries, $newEntry;
+}
 
-my $testEntryTwo = Address->new();
-$testEntryTwo->saveAttribute( 'email',  'blub@bla.de' );
-$testEntryTwo->saveAttribute( 'number', 98765 );
-push @entries, $testEntryTwo;
+#fill array with test data:
+#my $testEntryOne = Address->new();
+#$testEntryOne->saveAttribute( 'email',  'test@example.com' );
+#$testEntryOne->saveAttribute( 'number', 67890 );
+#push @entries, $testEntryOne;
+
+#my $testEntryTwo = Address->new();
+#$testEntryTwo->saveAttribute( 'email',  'blub@bla.de' );
+#$testEntryTwo->saveAttribute( 'number', 98765 );
+#push @entries, $testEntryTwo;
 
 #my $testEntryThree = Address->new(
 #	attributes => {
@@ -61,6 +111,13 @@ sub attributesInput {
     return %newAttributes;
 }
 
+sub saveToDB {
+	my ( $entry ) = @_; #should be of type Address
+	my %hashDeref = %{$entry->getAllHashRef()};
+	$collection->insert( $entry->getAllHashRef() );
+	#dump %hashDeref;
+}
+
 sub newEntry {
     say "enter new entry:";
 
@@ -71,6 +128,7 @@ sub newEntry {
 		$newEntry->saveAttribute($key, $newAttributes{$key});
 	}
     push @entries, $newEntry;
+	saveToDB($newEntry);
     say "writing entry finished";
 
     return;
@@ -228,3 +286,5 @@ while (1) {
     }
     print "\n";
 }
+
+#$dbh->disconnect;

@@ -61,4 +61,9 @@ sub printAll {
     #}
 }
 
+sub getAllHashRef {
+	my $self = shift;
+	return $self->attributes();
+}
+
 return 1;

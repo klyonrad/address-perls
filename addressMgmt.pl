@@ -114,8 +114,11 @@ sub attributesInput {
 sub saveToDB {
 	my ( $entry ) = @_; #should be of type Address
 	my %hashDeref = %{$entry->getAllHashRef()};
-	$collection->insert( $entry->getAllHashRef() );
-	#dump %hashDeref;
+	if ($entry->getAttribute('_id') == -1 ) {
+		say 'not in database yet!';
+		$collection->insert( $entry->getAllHashRef() );
+	}
+		
 }
 
 sub newEntry {

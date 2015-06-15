@@ -118,7 +118,9 @@ sub saveToDB {
 		say 'not in database yet!';
 		$collection->insert( $entry->getAllHashRef() );
 	}
-		
+	else {
+		say 'object may be already in database';
+	}	
 }
 
 sub newEntry {
@@ -139,16 +141,28 @@ sub newEntry {
 
 sub addAttributes {
     my ($searchQuery) = @_;
-    my $indexForChange = searchEntry( $searchQuery, 1 );
-
+    my @searchResults = searchEntry( $searchQuery, 1 );
+	my $indexForChange = $searchResults[0];
+	#dump $indexForChange;
+	
     #todo: check for existence of that entry. if not then end function
+	my $entry = $entries[$indexForChange];
+	my $objectID = $entry->getAttribute('_id');
 
     say 'enter new attributes. Will overwrite data!';
     my %attributes = attributesInput();
 
-    my @newAttributes = keys %attributes;
-    for my $attribute (@newAttributes) {
-        $entries[$indexForChange]{$attribute} = $attributes{$attribute};
+
+    my @attributeKeys = keys %attributes;
+    for my $attribute (@attributeKeys) { #store change both in-memory and in database
+        #$entries[$indexForChange]{$attribute} = $attributes{$attribute};
+		$entry->saveAttribute($attribute, $attributes{$attribute});
+		$collection->update(
+			{"_id" => $objectID}, 
+			{'$set' => {
+				$attribute => $attributes{$attribute}
+				}
+		});
     }
     return;
 }

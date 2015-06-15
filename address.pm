@@ -46,7 +46,7 @@ sub printAll {
     #copied over from old main:
     my %entryDeref      = %{ $self->attributes() };    #dereference
     for my $attribute ( keys %entryDeref ) {
-        print "The value of '$attribute' is %entryDeref{$attribute}\n";
+        print "The value of '$attribute' is $entryDeref{$attribute}\n";
     }
 
     #from http://stackoverflow.com/a/21605117/1796645

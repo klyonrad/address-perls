@@ -1,6 +1,7 @@
 package Address;
 
 use Moose;
+use Data::Dump 'dump';
 
 has 'attributes' => (
     is      => 'rw',

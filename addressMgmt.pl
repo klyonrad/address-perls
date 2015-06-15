@@ -65,10 +65,10 @@ sub newEntry {
     say "enter new entry:";
 
     my %newAttributes = attributesInput();
-	my $newEntry = Adress->new();
+	my $newEntry = Address->new();
 	
 	for my $key (keys %newAttributes) {
-		$newEntry->saveAttribute($newAttributes{$key});
+		$newEntry->saveAttribute($key, $newAttributes{$key});
 	}
     push @entries, $newEntry;
     say "writing entry finished";

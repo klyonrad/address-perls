@@ -169,18 +169,24 @@ sub addAttributes {
 
 sub deleteEntry {
     my ($searchQuery) = @_;
-    my $index = searchEntry( $searchQuery, 1 );
+	my @searchResults = searchEntry( $searchQuery, 1 );
+    my $index = $searchResults[0];
+	
+	my $entry = $entries[$index];
+	my $objectID = $entry->getAttribute('_id');
 
     #todo: check for existence of that entry. if not then end function
-
+	$collection->remove( {"_id" => $objectID } );
     splice @entries, $index, 1;
+	
     say "entry removed";
     return;
 }
 
 sub showEntry {
     my ($searchQuery) = @_;
-    my $index = searchEntry( $searchQuery, 1 );
+	my @searchResults = searchEntry( $searchQuery, 1 );
+    my $index = $searchResults[0];
 
     #todo: check for existence of that entry. if not then end function
 
@@ -223,11 +229,9 @@ sub searchEntry {
 
     while ( my ( $index, $entry ) = each(@entries) ) {
 
-        #dump $entry;
-
         if ( ( index $entry->getAttribute('email'), $searchQuery ) != -1 )
         {    #search in string function
-            say "found one at $index";
+            say "(debug) found one at $index"; #debugging info
             dump $entries[$index];
             push @results, $index;
             if ( $limit == 1 ) {
@@ -244,7 +248,6 @@ sub menuPrompt {
     print "\n";
     chomp $input;
     my @args = split / /, $input, 2;    #split arguments into to parts
-                                        #dump @args;
     return @args;
 }
 

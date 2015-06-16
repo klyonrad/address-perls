@@ -1,0 +1,22 @@
+<div class="jumbotron">
+
+  <h2>[% headline %]</h2>
+  <p>[% text %]</p>
+  
+  <ul class=entries>
+  [% IF entries.size %]
+    [% FOREACH thing IN entries %]
+      <li>[% thing.getAttribute('email') %]</li>
+    [% END %]
+  [% ELSE %]
+    <li><em>Unglaublich. Es gibt keinen Listeninhalt!</em>
+  [% END %]
+  </ul>
+
+  <br>
+  <p>
+    <a class="btn btn-lg btn-primary" href="#" role="button">Das gefällt mir!</a>
+  </p>
+  
+  
+</div>

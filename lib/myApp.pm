@@ -265,7 +265,7 @@ get '/' => sub {
       'page_name' => 'List',
       'headline'  => 'All the entries in our address database',
       'text'      => $text,
-	  'entries'   => \@content
+	  'entries'   => \@entries
     };
 };
 
@@ -276,6 +276,21 @@ get '/new' => sub {
       'text'      => $text.$part2,
       'entries'   => \@content,
     };
+};
+
+post '/new' => sub {	
+	my $newEntry = Address->new();
+	
+	$newEntry->saveAttribute('email', param('email'));
+	$newEntry->saveAttribute('number', param('number'));
+		
+    push @entries, $newEntry;
+	saveToDB($newEntry);
+	
+	say 'saved entry:';
+	$newEntry->printAll();
+	
+	redirect '/';
 };
 
 #let's dance

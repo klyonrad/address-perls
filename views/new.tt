@@ -3,14 +3,14 @@
   <h2>[% headline %]</h2>
   <p>[% text %]</p>
 
-<form>
+<form method="post">
   <div class="form-group">
     <label for="exampleInputEmail1">Email address</label>
-    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+    <input name="email" type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
   </div>
   <div class="form-group">
     <label for="exampleInputNumber">Number</label>
-    <input type="number" class="form-control" id="exampleInputNumber" placeholder="Number">
+    <input name="number" type="number" class="form-control" id="exampleInputNumber" placeholder="Number">
   </div>
   <button type="submit" class="btn btn-default">Submit</button>
 </form>

@@ -203,6 +203,19 @@ sub deleteEntry {
     return;
 }
 
+sub deleteEntryWithIndex {
+	my ($index) = @_;
+	my $entry = $entries[$index];
+	my $objectID = $entry->getAttribute('_id');
+
+    #todo: check for existence of that entry. if not then end function
+	$collection->remove( {"_id" => $objectID } );
+    splice @entries, $index, 1;
+	
+    say "entry removed";
+    return;
+}
+
 sub showEntry {
     my ($searchQuery) = @_;
 	my @searchResults = searchEntry( $searchQuery, 1 );
@@ -328,6 +341,11 @@ post 'edit/:id' => sub {
 	$entry->printAll();
 	changePropertyInDB($entry, 'email', param('email'));
 	changePropertyInDB($entry, 'number', param('number'));
+	redirect '/';
+};
+
+any '/delete/:id' => sub {
+	deleteEntryWithIndex(param('id'));
 	redirect '/';
 };
 

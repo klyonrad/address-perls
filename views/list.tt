@@ -14,7 +14,10 @@
   [% IF entries.size %]
     [% FOREACH thing IN entries %]
 	  <tr>
-	    <td><a href="/edit/[% loop.index %]">[% loop.index %]</a></td>
+	    <td>
+			<a href="/edit/[% loop.index %]" style="border-right:1px solid blue; padding-right: 5px;">EDIT</a>
+			<a href="/delete/[% loop.index %]">DELETE</a> <!-- to lazy for complicated hacks to change this to POST method -->
+		</td>
 	    <td>[% thing.getAttribute('email') %]</td>
 	    <td>[% thing.getAttribute('number') %]</td>
 	  </tr>

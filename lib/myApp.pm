@@ -129,6 +129,20 @@ sub saveToDB {
 	}	
 }
 
+sub changePropertyInDB {
+	my ( $entry, $key, $value ) = @_; #Type Address, keyname as string, value
+	my $objectID = $entry->getAttribute('_id');
+	
+    #store change both in-memory and in database
+    $entry->saveAttribute($key, $value);
+    $collection->update(
+ 			{"_id" => $objectID}, 
+ 			{'$set' => {
+ 				$key => $value
+ 				}
+ 		});
+}
+
 sub newEntry {
     say "enter new entry:";
 
@@ -305,6 +319,18 @@ get 'edit/:id' => sub {
 	  'entry'	  => $entry
     };
 };
+
+post 'edit/:id' => sub {
+	say "changing entry for entry: " .param('id');
+	
+    #todo: check for existence of that entry. if not then end function
+	my $entry = $entries[param('id')];
+	$entry->printAll();
+	changePropertyInDB($entry, 'email', param('email'));
+	changePropertyInDB($entry, 'number', param('number'));
+	redirect '/';
+};
+
 #let's dance
 dance;
 true;

@@ -273,8 +273,7 @@ get '/new' => sub {
     template 'new.tt', {
       'page_name' => 'New Entry',
       'headline'  => 'Enter a new entry in the form',
-      'text'      => $text.$part2,
-      'entries'   => \@content,
+      'text'      => $text.$part2
     };
 };
 
@@ -293,6 +292,19 @@ post '/new' => sub {
 	redirect '/';
 };
 
+get 'edit/:id' => sub {
+	
+    #todo: check for existence of that entry. if not then end function
+	my $entry = $entries[param('id')];
+	my $objectID = $entry->getAttribute('_id');
+	
+    template 'edit.tt', {
+      'page_name' => 'Edit Entry',
+      'headline'  => 'Edit the entry in the form',
+      'text'      => $text.$part2,
+	  'entry'	  => $entry
+    };
+};
 #let's dance
 dance;
 true;

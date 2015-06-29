@@ -6,11 +6,11 @@
 <form method="post">
   <div class="form-group">
     <label for="exampleInputEmail1">Email address</label>
-    <input name="email" type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+    <input name="email" type="email" class="form-control" id="exampleInputEmail1" value="[% entry.getAttribute('email') %]">
   </div>
   <div class="form-group">
     <label for="exampleInputNumber">Number</label>
-    <input name="number" type="number" class="form-control" id="exampleInputNumber" placeholder="Number">
+    <input name="number" type="number" class="form-control" id="exampleInputNumber" value="[% entry.getAttribute('number') %]">
   </div>
   <button type="submit" class="btn btn-lg btn-primary">Submit</button>
 </form>

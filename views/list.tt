@@ -3,15 +3,28 @@
   <h2>[% headline %]</h2>
   <p>[% text %]</p>
   
-  <ul class=entries>
+  <table class="entries table" style="width:100%">
+	  <thead>
+		  <tr>
+  	    <th>ID</th>
+  	    <th>EMAIL</th>
+  	    <th>NUMBER</th>
+	</tr>
+	  </thead>
+	  <tbody>
   [% IF entries.size %]
     [% FOREACH thing IN entries %]
-      <li>[% thing.getAttribute('email') %]</li>
+	  <tr>
+	    <td>[% loop.index %]</td>
+	    <td>[% thing.getAttribute('email') %]</td>
+	    <td>[% thing.getAttribute('number') %]</td>
+	  </tr>
     [% END %]
   [% ELSE %]
-    <li><em>Unglaublich. Es gibt keinen Listeninhalt!</em>
+    <em>Unglaublich. Es gibt keinen Listeninhalt!</em>
   [% END %]
-  </ul>
+	</tbody>
+  </table>
 
   <br>
   <p>
